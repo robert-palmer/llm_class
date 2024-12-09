@@ -1,13 +1,18 @@
+from re import VERBOSE
 from crewai import Agent
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
+"""
+long/short variable to determine how we analyze the stock
+one dude makes a bull case, other makes a bear case
+variables - analyst focuses on technicals, other fundementals 
+
+"""
+VERBOSE = False
+
 
 search_tool = SerperDevTool()
 scrape_tool = ScrapeWebsiteTool()
-"""
-long/short variable to determine how we analyze the stock
 
-
-"""
 researcher = Agent(
       role="Researcher",
       goal="Collect stock-related data and news for {company} from online sources",
@@ -19,7 +24,7 @@ researcher = Agent(
                 "and presenet it in a clear actionable format",
       allow_delegation=False,
       tools=[search_tool, scrape_tool],
-      verbose=True,
+      verbose=VERBOSE,
 
   )
 
@@ -36,7 +41,7 @@ analyzer = Agent(
               "and provide a reccomendation as to whether the {company} "
               "is going to perform well or badly",
     allow_delegation=False,
-    verbose=True,
+    verbose=VERBOSE,
 )
 
 report_builder = Agent(
@@ -45,10 +50,11 @@ report_builder = Agent(
       backstory="You're a CFA charterholder with years of experience who is analyzing  "
                 "whether {company} is a good investment. "
                 "You want to consider the most important financial and non-financial factors "
-                "as well as macroeconomic factors that are effecting the company in the past, today, and the future.",
-      allow_delegation=False,
-      tools=[search_tool, scrape_tool],
-      verbose=True,
+                "as well as macroeconomic factors that are effecting the company in the past, today, and the future."
+                "Please be clear whether the investment is good or bad. If bad, do not try to sugarcoat it.",
+      allow_delegation=True,
+      tools=[],
+      verbose=VERBOSE,
 
   )
 

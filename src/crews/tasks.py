@@ -1,6 +1,6 @@
 from crewai import Task
 from .agents import researcher, analyzer, report_builder
-
+ 
 research = Task(
     description=(
         "1. Prioritize the latest trends, key players, commentary, events, "
@@ -33,12 +33,13 @@ analyze = Task(
         "ready for investor analysis, "
         "each section should have 1 paragraph.",
     agent=analyzer,
+    human_input=True,
 
 )
 
 report_build = Task(
     description=(
-        "1. Use the content plan to craft a investment pitch on {company}.\n"
+           "1. Use the content plan to craft a investment pitch on {company}.\n"
         "2. Prioritize the most important information that is financially material.\n"
 		"3. Sections/Subtitles are properly named "
             "in an engaging manner.\n"
