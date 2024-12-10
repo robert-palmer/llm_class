@@ -1,3 +1,4 @@
+import json
 import os 
 from dotenv import load_dotenv
 from fastapi import FastAPI
@@ -33,4 +34,10 @@ os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
 if __name__ == "__main__":
     inputs={"company": "RBOT"}
     result = crew.kickoff(inputs)
+    print(result)
+
+    json_result = json.dumps(result.json_dict, indent=2)
+    with open("output.json", "w") as f:
+        f.write(json_result)
+    
 
