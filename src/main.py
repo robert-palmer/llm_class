@@ -2,6 +2,7 @@ import json
 import os 
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from crews.crew import crew
 
@@ -22,22 +23,19 @@ os.environ["OPENAI_MODEL_NAME"] = LLM_MODEL
 os.environ['SERPER_API_KEY'] = SERPER_DEV_API_KEY
 os.environ['OPENAI_API_KEY'] = OPENAI_API_KEY
 
-# app = FastAPI()
+app = FastAPI()
 
-# @app.get("/get_company_info/{company}")
-# async def get_company_info(company: str):
-#     inputs={"company": company}
-#     result = await crew.kickoff_async(inputs)
-#     return result
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Adjust this to the origin of your frontend
+    allow_credentials=True,
+    allow_methods=["*"],  # Allow all HTTP methods (GET, POST, PUT, etc.)
+    allow_headers=["*"],  # Allow all headers
+)
 
-
-if __name__ == "__main__":
-    inputs={"company": "RBOT"}
-    result = crew.kickoff(inputs)
+@app.get("/get_company_info/{company}")
+async def get_company_info(company: str):
+    inputs={"company": company}
+    result = await crew.kickoff_async(inputs)
     print(result)
-
-    json_result = json.dumps(result.json_dict, indent=2)
-    with open("output.json", "w") as f:
-        f.write(json_result)
-    
-
+    return result

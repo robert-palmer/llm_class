@@ -1,6 +1,7 @@
 from crewai import Task
 from pydantic import BaseModel
-from regex import E
+
+from .models import Edit_Task_Output
 from .agents import researcher, technical_analyzer, econ_analyzer, fundamental_analyzer, report_builder, editor
  
 research = Task(
@@ -102,18 +103,16 @@ report_build = Task(
 
 )
 
-class Edit_Task_Output(BaseModel):
-    title: str
-    content: str
 
 edit = Task(
     description=
         "1. Review the content from the report builder to ensure that "
             "the writing is concise and without spelling.",
-
+    # expected_output=Edit_Task_Output,
     expected_output="A well-written {company} investor report. "
         "Each section should have at least 1 paragraph.",
     agent=editor,
+    output_json=Edit_Task_Output
     # output_json=Edit_Task_Output()
     # output_file="content/output.json"
 

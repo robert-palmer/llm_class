@@ -1,6 +1,9 @@
 from re import VERBOSE
 from crewai import Agent
 from crewai_tools import ScrapeWebsiteTool, SerperDevTool
+
+from .models import Edit_Task_Output
+
 """
 long/short variable to determine how we analyze the stock
 one dude makes a bull case, other makes a bear case
@@ -150,4 +153,5 @@ editor = Agent(
               "to check for spelling errors and to ensure the content is clear and concise.",
     allow_delegation=False,
     verbose=True,
+    # output_pydantic=Edit_Task_Output,
 )
